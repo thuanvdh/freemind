@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="index.css" rel="stylesheet">
+</head>
+
+<body>
+    <form onsubmit="submit_cv()" method="post" id="form-test">
+        <div id="wrapper">
+
+            <!-- Header -->
+            <div id="header">
+                <img id="icon-x" src="./img/X.png" />
+                <img id="img-freemind" src="./img/bg.png" />
+                <span id="send-cv">Hãy gửi CV của bạn cho chúng tôi</span>
+            </div>
+
+            <!-- Body -->
+            <div id="contend">
+                <div class="row">
+                    <div class="col-left">
+                        <div class="label">Tên của bạn</div>
+                    </div>
+                    <div class="col-right"><input class="input-fm" placeholder="Ví dụ: Nguyễn Văn A" required id="name" /></div>
+                </div>
+                <div class="row">
+                    <div class="col-left">
+                        <div class="label">Số điện thoại</div>
+                    </div>
+                    <div class="col-right"><input class="input-fm" placeholder="Số điện thoại liên lạc" required type="tel" maxlength="12" minlength="10" onkeyup="phoneMask()" id="phone" /></div>
+                </div>
+                <div class="row">
+                    <div class="col-left">
+                        <div class="label">Vị trí</div>
+                    </div>
+                    <div class="col-right">
+                        <select class="input-fm select-fm" name="select-location" id="position">
+                        <option value="junior">Junior Ecommerce Web Developer</option>
+                        <option value="senior">Senior Ecommerce Web Developer</option>
+                    </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-left">
+                        <div class="label">Kinh nghiệm <br/>làm việc</div>
+                    </div>
+                    <div class="col-right">
+                        <textarea required class="input-fm border" id="experience" name="" rows="4" cols="50" style="width: 360px; height: 140px; margin-bottom: 6px;">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard d scrambled it to make a type specimen book.         
+                    </textarea>
+                        <div id="attract"><input type="file" id="file-img"> <br><img id="icon-vector" src="./img/Vector.png" /><span id="attact-img">Đính kèm hình ảnh</span></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-left">
+                        <div class="label">Email</div>
+                    </div>
+                    <div class="col-right"><input class="input-fm border" placeholder="Ex: contact@freemind.vn" type="email" id="email" required /></div>
+                </div>
+                <button type="submit" id="button-send-cv">GỬI CV cho Freemind</button>
+
+            </div>
+
+        </div>
+
+    </form>
+</body>
+
+</html>
+<script type="text/javascript">
+    function submit_cv() {
+        var num = document.getElementById("phone").value.replace(/\D/g, '');
+        var name = document.getElementById("name").value;
+        var email = document.getElementById("email").value;
+        var experience = document.getElementById("experience").value;
+        var position = document.getElementById("position").value;
+        var file_name = document.getElementById("file-img").files[0].name
+
+        //check sdt
+        if (num.length < 10 && name != "") {
+            alert("Phone must be from 10 to 12 number");
+        }
+        $.post(
+            'https://freemind-test.netlify.app/.netlify/functions/test', {
+                name: name,
+                phone: num,
+                position: position,
+                exp: experience,
+                picture: file_name,
+                email: email
+            },
+            function(result) {
+                $('#result').html(result);
+            },
+            'text'
+        );
+    }
+
+    function phoneMask() {
+        document.getElementById("phone").value = document.getElementById("phone").value.replace(/\D/g, '');
+    }
+</script>
